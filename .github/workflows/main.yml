@@ -1,9 +1,21 @@
 name: Release & Deploy
 
+# Déclencheurs : tests à chaque commit/PR sur main, release manuelle ou sur tag
 on:
   push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  create:
     tags:
       - 'v*.*.*'
+
+# Permissions globales
+permissions:
+  contents: write      # pour pouvoir push des tags & créer des releases
+  id-token: write      # si vous utilisez OIDC
+  actions: read
 
 jobs:
   release-deploy:
