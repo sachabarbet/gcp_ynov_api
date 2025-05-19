@@ -1,0 +1,46 @@
+- hosts: springboot
+  become: true
+  tasks:
+    - name: Installer Java et Git
+      apt:
+        name: [openjdk-17-jdk, git]
+        state: present
+        update_cache: yes
+
+    - name: Cloner ou mettre à jour l'API
+      git:
+        repo: 'https://github.com/VOTRE_USER/VOTRE_REPO.git'
+        dest: /home/ubuntu/api
+        version: main
+
+    - name: Builder l'application
+      shell: mvn -f /home/ubuntu/api/pom.xml clean package -DskipTests
+
+    - name: Copier le jar
+      copy:
+        src: /home/ubuntu/api/target/*.jar
+        dest: /home/ubuntu/app/app.jar
+
+    - name: Déployer le service systemd
+      copy:
+        dest: /etc/systemd/system/springboot.service
+        content: |
+          [Unit]
+          Description=Spring Boot App
+          After=network.target
+
+          [Service]
+          User=ubuntu
+          ExecStart=/usr/bin/java -jar /home/ubuntu/app/app.jar
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+      notify: Restart SpringBoot
+
+  handlers:
+    - name: Restart SpringBoot
+      systemd:
+        name: springboot
+        state: restarted
+        enabled: true
