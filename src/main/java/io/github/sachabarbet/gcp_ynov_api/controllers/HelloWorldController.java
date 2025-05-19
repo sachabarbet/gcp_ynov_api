@@ -16,4 +16,9 @@ public class HelloWorldController {
     public String helloName(@PathVariable String name) {
         return "Hello, " + name + "!";
     }
+
+    @GetMapping("/hello-dog")
+    public String helloDog() {
+        return "Hello, my dog !";
+    }
 }
