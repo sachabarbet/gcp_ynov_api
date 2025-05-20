@@ -1,25 +1,33 @@
 - hosts: springboot
   become: true
   tasks:
-    - name: Installer Java et Git
+    - name: Installer Java, Git et maven
       apt:
-        name: [openjdk-21-jdk, git]
+        name: [openjdk-21-jdk, git, maven]
         state: present
         update_cache: yes
+
+    - name: Set JAVA_HOME environment variable
+      become: yes
+      lineinfile:
+        path: /etc/environment
+        regexp: '^JAVA_HOME='
+        line: 'JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64'
+        state: present
 
     - name: Cloner ou mettre à jour l'API
       git:
         repo: 'https://github.com/sachabarbet/gcp_ynov_api.git'
-        dest: /home/ubuntu/api
+        dest: /home/sacha/api
         version: main
 
     - name: Builder l'application
-      shell: mvn -f /home/ubuntu/api/pom.xml clean package -DskipTests
+      shell: mvn -f /home/sacha/api/pom.xml clean package -DskipTests
 
     - name: Copier le jar
       copy:
-        src: /home/ubuntu/api/target/*.jar
-        dest: /home/ubuntu/app/app.jar
+        src: /home/sacha/api/target/*.jar
+        dest: /home/sacha/app/app.jar
 
     - name: Déployer le service systemd
       copy:
@@ -31,7 +39,7 @@
 
           [Service]
           User=ubuntu
-          ExecStart=/usr/bin/java -jar /home/ubuntu/app/app.jar
+          ExecStart=/usr/bin/java -jar /home/sacha/app/app.jar
           Restart=always
 
           [Install]
