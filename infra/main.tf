@@ -25,7 +25,7 @@ resource "google_compute_instance" "app" {
 
   boot_disk {
     initialize_params {
-      image = "ubuntu-2004-focal-v20230120"
+      image = "ubuntu-2004-lts"
     }
   }
 
