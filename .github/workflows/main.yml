@@ -52,7 +52,7 @@ jobs:
         run: |
           cd infra
           terraform init
-          terraform apply -auto-approve
+          terraform apply -auto-approve -var project_id=${{ secrets.GCP_PROJECT }}
 
       - name: Deploy Ansible
         run: |
