@@ -30,8 +30,11 @@
         patterns: '*.jar'
       register: jar_files
 
-    - name: Create app dir
-      shell: mkdir ~/app
+    - name: Ensure destination directory exists
+      ansible.builtin.file:
+        path: /home/sacha/app
+        state: directory
+        mode: '0755'
 
     - name: Copy the JAR file
       ansible.builtin.copy:
