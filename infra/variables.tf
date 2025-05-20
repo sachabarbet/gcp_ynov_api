@@ -14,3 +14,14 @@ variable "zone" {
   type        = string
   default     = "europe-west1-b"
 }
+
+variable "gcs_bucket" {
+  description = "Bucket GCS pour le state Terraform"
+  type        = string
+}
+
+variable "gcp_credentials_file" {
+  description = "Chemin vers le fichier JSON de la SA"
+  type        = string
+  default     = "../gha-creds.json"
+}
