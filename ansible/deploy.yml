@@ -24,11 +24,19 @@
     - name: Builder l'application
       shell: mvn -f /home/sacha/apisrc/api/pom.xml clean package -DskipTests
 
-    - name: Copier le jar
-      copy:
-        src: /home/sacha/apisrc/api/target/*.jar
-        dest: /home/sacha/app/app.jar
+    - name: Find the JAR file
+      ansible.builtin.find:
+        paths: /home/sacha/apisrc/api/target/
+        patterns: '*.jar'
+      register: jar_files
 
+    - name: Copy the JAR file
+      ansible.builtin.copy:
+        src: "{{ item.path }}"
+        dest: /home/sacha/app/app.jar
+        remote_src: yes
+      loop: "{{ jar_files.files }}"
+      
     - name: Déployer le service systemd
       copy:
         dest: /etc/systemd/system/springboot.service
