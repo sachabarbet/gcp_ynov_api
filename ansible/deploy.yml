@@ -30,6 +30,9 @@
         patterns: '*.jar'
       register: jar_files
 
+    - name: Create app dir
+      shell: mkdir ~/app
+
     - name: Copy the JAR file
       ansible.builtin.copy:
         src: "{{ item.path }}"
