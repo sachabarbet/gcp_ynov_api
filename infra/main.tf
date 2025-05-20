@@ -10,10 +10,13 @@ resource "google_compute_network" "vpc" {
 resource "google_compute_firewall" "fw" {
   name    = "springboot-fw"
   network = google_compute_network.vpc.name
+
   allow {
     protocol = "tcp"
     ports    = ["22", "8080"]
   }
+
+  source_ranges = ["0.0.0.0/0"]
 }
 
 resource "google_compute_instance" "app" {
@@ -23,7 +26,7 @@ resource "google_compute_instance" "app" {
 
   boot_disk {
     initialize_params {
-      image = "ubuntu-2004-focal-v20230120"
+      image = "ubuntu-2004-lts"
     }
   }
 
