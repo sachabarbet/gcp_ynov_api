@@ -14,6 +14,8 @@ resource "google_compute_firewall" "fw" {
     protocol = "tcp"
     ports    = ["22", "8080"]
   }
+
+  source_ranges = ["0.0.0.0/0"]
 }
 
 resource "google_compute_instance" "app" {
