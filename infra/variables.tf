@@ -1,6 +1,7 @@
 variable "project_id" {
   description = "spherical-proxy-460312-b8"
   type        = string
+  default     = "spherical-proxy-460312-b8"
 }
 
 variable "region" {
@@ -18,10 +19,5 @@ variable "zone" {
 variable "gcs_bucket" {
   description = "Bucket GCS pour le state Terraform"
   type        = string
-}
-
-variable "gcp_credentials_file" {
-  description = "Chemin vers le fichier JSON de la SA"
-  type        = string
-  default     = "../gha-creds.json"
+  default     = "bucket-gcp-ynov"
 }
