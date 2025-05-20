@@ -5,14 +5,14 @@
 # 1. Incrémenter la version en SemVer
 echo "Incrémentation de la version SemVer..."
 # Extraction de la version actuelle depuis pubspec.yaml
-CURRENT_VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}')
+CURRENT_VERSION=$(grep 'version:' api/pubspec.yaml | awk '{print $2}')
 # Incrémenter le patch (ex: 1.0.0 -> 1.0.1)
 IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
 NEW_PATCH=$((PATCH + 1))
 NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
 # Mettre à jour pubspec.yaml avec la nouvelle version
-sed -i "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" pubspec.yaml
-git add pubspec.yaml
+sed -i "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" api/pubspec.yaml
+git add api/pubspec.yaml
 
 # 2. Générer un changelog propre avec les changements pertinents
 echo "Génération du changelog..."

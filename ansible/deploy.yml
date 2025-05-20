@@ -3,13 +3,13 @@
   tasks:
     - name: Installer Java et Git
       apt:
-        name: [openjdk-17-jdk, git]
+        name: [openjdk-21-jdk, git]
         state: present
         update_cache: yes
 
     - name: Cloner ou mettre à jour l'API
       git:
-        repo: 'https://github.com/VOTRE_USER/VOTRE_REPO.git'
+        repo: 'https://github.com/sachabarbet/gcp_ynov_api'
         dest: /home/ubuntu/api
         version: main
 
