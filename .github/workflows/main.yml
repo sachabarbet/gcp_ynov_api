@@ -53,7 +53,15 @@ jobs:
           cd infra
           terraform init
           terraform apply -auto-approve -var project_id=${{ secrets.GCP_PROJECT }}
-
+          
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 35.205.135.126 >> ~/.ssh/known_hosts
+        shell: bash
+        
       - name: Deploy Ansible
         run: |
           ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
