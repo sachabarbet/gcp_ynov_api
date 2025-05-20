@@ -5,7 +5,7 @@
 # 1. Incrémenter la version en SemVer
 echo "Incrémentation de la version SemVer..."
 # Extraction de la version actuelle depuis pubspec.yaml
-CURRENT_VERSION=$(grep 'version:' api/pubspec.yaml | awk '{print $2}')
+CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 # Incrémenter le patch (ex: 1.0.0 -> 1.0.1)
 IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
 NEW_PATCH=$((PATCH + 1))
