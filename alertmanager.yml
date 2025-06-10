@@ -1,0 +1,21 @@
+global:
+  smtp_smarthost: 'localhost:587'
+  smtp_from: 'sacha.barbet@proton.me'
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'web.hook'
+
+receivers:
+- name: 'web.hook'
+  email_configs:
+  - to: 'sacha.barbet@proton.me'
+    subject: 'Alert: {{ .GroupLabels.alertname }}'
+    body: |
+      {{ range .Alerts }}
+      Alert: {{ .Annotations.summary }}
+      Description: {{ .Annotations.description }}
+      {{ end }}

@@ -74,3 +74,10 @@ jobs:
           ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
         env:
           ANSIBLE_HOST_KEY_CHECKING: 'False'
+
+
+      - name: Deploy Monitoring
+        run: |
+          terraform apply -target=google_compute_instance.monitoring -auto-approve
+          sleep 60
+          curl -f http://$MONITORING_IP:9090/-/healthy || exit 1
