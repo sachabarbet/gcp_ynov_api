@@ -80,6 +80,17 @@ jobs:
       - name: Deploy Monitoring Stack
         run: |
           cd infra
+          # Vérifier si les ressources existent déjà
+          if terraform state show google_compute_instance.monitoring > /dev/null 2>&1; then
+            echo "ℹ️  Monitoring instance already exists in Terraform state"
+          else
+            echo "📦 Deploying monitoring stack..."
+            # Essayer d'importer les ressources si elles existent
+            terraform import google_compute_instance.monitoring projects/${{ env.GCP_PROJECT }}/zones/europe-west1-b/instances/monitoring-server-dev || true
+            terraform import google_compute_firewall.monitoring projects/${{ env.GCP_PROJECT }}/global/firewalls/allow-monitoring-dev || true
+          fi
+          
+          # Appliquer les changements
           terraform apply -target=google_compute_instance.monitoring -target=google_compute_firewall.monitoring -auto-approve
           
       # Récupération de l'IP du serveur de monitoring
