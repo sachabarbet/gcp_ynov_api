@@ -1,4 +1,9 @@
 # Instance pour le monitoring
+provider "google" {
+  project = var.project_id
+  region  = var.region
+}
+
 resource "google_compute_instance" "monitoring" {
   name         = "monitoring-server-${var.environment}"
   machine_type = "e2-medium"
