@@ -21,3 +21,9 @@ variable "gcs_bucket" {
   type        = string
   default     = "bucket-gcp-ynov"
 }
+
+variable "environment" {
+  description = "Environment name"
+  type        = string
+  default     = "dev"
+}
