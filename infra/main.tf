@@ -34,7 +34,7 @@ resource "google_compute_instance" "monitoring" {
     access_config {}
   }
 
-  metadata_startup_script = file("setup-monitoring.sh")
+  metadata_startup_script = file("../setup-monitoring.sh")
 
   tags = ["monitoring", "http-server"]
 }
