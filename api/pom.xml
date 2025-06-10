@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>io.github.sachabarbet</groupId>
 	<artifactId>gcp-ynov-api</artifactId>
-	<version>0.0.20</version>
+	<version>0.0.21</version>
 	<name>gcp-ynov-api</name>
 	<description>GCP CI/CO Ynov</description>
 	<url/>
