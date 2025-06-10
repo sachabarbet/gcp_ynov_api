@@ -13,6 +13,6 @@ alerting:
 scrape_configs:
   - job_name: 'spring-boot-app'
     static_configs:
-      - targets: ['your-app-ip:8080']
+      - targets: ['35.205.135.126:8080']
     metrics_path: '/actuator/prometheus'
     scrape_interval: 5s
