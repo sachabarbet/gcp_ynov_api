@@ -76,8 +76,40 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: 'False'
 
 
-      - name: Deploy Monitoring
+      # Nouvelle étape pour déployer le monitoring
+      - name: Deploy Monitoring Stack
         run: |
-          terraform apply -target=google_compute_instance.monitoring -auto-approve
-          sleep 60
-          curl -f http://$MONITORING_IP:9090/-/healthy || exit 1
+          cd infra
+          terraform apply -target=google_compute_instance.monitoring -target=google_compute_firewall.monitoring -auto-approve
+          
+      # Récupération de l'IP du serveur de monitoring
+      - name: Get Monitoring IP
+        id: monitoring_ip
+        run: |
+          cd infra
+          MONITORING_IP=$(terraform output -raw monitoring_ip)
+          echo "monitoring_ip=$MONITORING_IP" >> $GITHUB_OUTPUT
+          echo "Monitoring server IP: $MONITORING_IP"
+
+      # Vérification que les services de monitoring sont opérationnels
+      - name: Verify Monitoring Services
+        run: |
+          echo "Waiting for monitoring services to start..."
+          sleep 120
+          
+          # Test Prometheus
+          curl -f http://${{ steps.monitoring_ip.outputs.monitoring_ip }}:9090/-/healthy || {
+            echo "Prometheus health check failed"
+            exit 1
+          }
+          
+          # Test Grafana
+          curl -f http://${{ steps.monitoring_ip.outputs.monitoring_ip }}:3000/api/health || {
+            echo "Grafana health check failed"
+            exit 1
+          }
+          
+          echo "✅ Monitoring stack is operational!"
+          echo "🔍 Prometheus: http://${{ steps.monitoring_ip.outputs.monitoring_ip }}:9090"
+          echo "📊 Grafana: http://${{ steps.monitoring_ip.outputs.monitoring_ip }}:3000"
+          echo "🚨 Alertmanager: http://${{ steps.monitoring_ip.outputs.monitoring_ip }}:9093"
