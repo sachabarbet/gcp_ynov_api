@@ -1,0 +1,18 @@
+spring:
+    application:
+        name: gcp-ynov-api
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health,info,metrics,prometheus
+    endpoint:
+        health:
+            show-details: always
+        metrics:
+            access: unrestricted
+    prometheus:
+        metrics:
+            export:
+                enabled: true
